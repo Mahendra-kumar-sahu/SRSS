@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Smart Restaurant</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    
+    <style>
+        /* CSS Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: #f7f7f7;
+            color: #333;
+            line-height: 1.6;
+        }
+        a {
+            text-decoration: none;
+            color: #fff;
+        }
+
+        ul {
+            list-style: none;
+        }
+        /* Header Styles */
+        .navbar {
+            background: #0F172B;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            position: relative;
+            flex-wrap: wrap;
+            
+        }
+
+        .navbar a {
+            color: #fff;
+            padding: 10px 15px;
+            transition: 0.3s;
+        }
+
+        .navbar a:hover {
+            background: #f4a261;
+        }
+
+        .menu {
+            display: flex;
+            gap: 20px;
+            font-size: 23px;
+            flex-wrap: wrap;
+        }
+        .hamburger {
+            display: none;
+            font-size: 26px;
+            cursor: pointer;
+          }
+          @media (max-width: 768px) {
+            .hamburger {
+              display: block;
+            }
+      
+            .menu {
+              display: none;
+              flex-direction: column;
+              width: 100%;
+              background: #333;
+              padding: 10px 0;
+            }
+      
+            .menu.show {
+              display: flex;
+            }
+      
+            .btn {
+              margin: 10px;
+            }
+          }
+
+        @media (max-width: 600px) {
+            .menu {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .section-title {
+            color: #FEA116;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: #0F172B;
+        }
+        
+        .tab-class {
+            margin-top: 30px;
+        }
+        
+        .nav-pills {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 30px;
+        }
+        
+        .nav-item {
+            margin: 0 15px;
+        }
+        
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #666;
+            padding: 10px 0;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .nav-item a.active {
+            color: #FEA116;
+            border-bottom: 3px solid #FEA116;
+        }
+        
+        .nav-item i {
+            font-size: 24px;
+            color: #FEA116;
+            margin-right: 10px;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: -15px;
+        }
+        
+        .col-lg-6 {
+            width: 50%;
+            padding: 15px;
+        }
+        
+        .d-flex {
+            display: flex;
+        }
+        
+        .align-items-center {
+            align-items: center;
+        }
+        
+        .img-fluid {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .rounded {
+            border-radius: 5px;
+        }
+        
+        .flex-shrink-0 {
+            flex-shrink: 0;
+        }
+        
+        .w-100 {
+            width: 100%;
+        }
+        
+        .flex-column {
+            flex-direction: column;
+        }
+        
+        .text-start {
+            text-align: left;
+        }
+        
+        .ps-4 {
+            padding-left: 1.5rem;
+        }
+        
+        h5 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #ddd;
+        }
+        
+        .text-primary {
+            color: #FEA116;
+        }
+        
+        .fst-italic {
+            font-style: italic;
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        button {
+            background: #FEA116;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-left: 10px;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #e08c0b;
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 5px 10px;
+            }
+            
+            .col-lg-6 {
+                width: 100%;
+            }
+            
+            .nav-pills {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-item {
+                margin: 5px 0;
+            }
+            nav ul li a.x{
+               margin-left: 400px;
+            }
+        }
+        
+        /* Cart notification */
+        .cart-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2a9d8f;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Cart notification -->
+   
+    <!-- Header -->
+    <header class="navbar">
+        <div class="logo">
+            <h2>🍕 Smart Restaurant</h2>
+        </div>
+        <div class="hamburger" onclick="toggleMenu()">☰</div>
+    
+        <nav class="menu" >
+            <a href="index.html">Home</a>
+            <a href="menulist1.html">Menu</a>
+            <a href="cart1.html">Cart</a>
+            <a href="contact.html">Contact Us</a>
+            <a href="booking.html" class="btn btn-primary py-2 px-4">Book A Table</a>
+        </nav>
+    </header>
+
+    <!-- Menu Start -->
+    <div class="container">
+        <div class="text-center">
+            <h5 class="section-title">Food Menu</h5>
+            <h1>Most Popular Items</h1>
+        </div>
+        <div class="tab-class">
+            <ul class="nav-pills">
+                <li class="nav-item">
+                    <a class="active" data-tab="tab-1">
+                        <i>☕</i>
+                        <div>
+                            <h3>Popular</h3>
+                            <h3>Breakfast</h3>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a data-tab="tab-2">
+                        <i>🍔</i>
+                        <div>
+                            <h3>Special</h3>
+                            <h3>Lunch</h3>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a data-tab="tab-3">
+                        <i>🍽️</i>
+                        <div>
+                            <h3>Lovely</h3>
+                            <h3>Dinner</h3>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content active" id="tab-1">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="d-flex align-items-center">
+                            <img class="flex-shrink-0 img-fluid rounded" src="1.webp" alt="Food" style="width: 150px;">
+                            <div class="w-100 d-flex flex-column text-start ps-4">
+                                <h5>
+                                    <span>Idli-Samabhar</span>
+                                    <span class="text-primary">50</span>
+                                    <button class="add-to-cart" data-name="Idli-Samabhar" data-price="50" data-img="1.webp">Add to Cart</button>
+                                </h5>
+                                <small class="fst-italic">Soft rice cakes with spicy lentil curry</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="d-flex align-items-center">
+                            <img class="flex-shrink-0 img-fluid rounded" src="dosa.jpg" alt="Food" style="width: 150px;">
+                            <div class="w-100 d-flex flex-column text-start ps-4">
+                                <h5>
+                                    <span>Dosa</span>
+                                    <span class="text-primary">70</span>
+                                    <button class="add-to-cart" data-name="Dosa" data-price="70" data-img="dosa.jpg">Add to Cart</button>
+                                </h5>
+                                <small class="fst-italic">Crispy dosa filled with spiced potatoes</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="d-flex align-items-center">
+                            <img class="flex-shrink-0 img-fluid rounded" src="puri.jpg" alt="Food" style="width: 150px;">
+                            <div class="w-100 d-flex flex-column text-start ps-4">
+                                <h5>
+                                    <span>Puri-Sabji</span>
+                                    <span class="text-primary">80</span>
+                                    <button class="add-to-cart" data-name="Puri-Sabji" data-price="80" data-img="puri.jpg">Add to Cart</button>
+                                </h5>
+                                <small class="fst-italic">Fried bread with tasty potato curry</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="d-flex align-items-center">
+                            <img class="flex-shrink-0 img-fluid rounded" src="poha.jpg" alt="Food" style="width: 150px;">
+                            <div class="w-100 d-flex flex-column text-start ps-4">
+                                <h5>
+                                    <span>Poha</span>
+                                    <span class="text-primary">40</span>
+                                    <button class="add-to-cart" data-name="Poha" data-price="40" data-img="poha.jpg">Add to Cart</button>
+                                </h5>
+                                <small class="fst-italic">Light flattened rice with veggies & spices</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="d-flex align-items-center">
+                            <img class="flex-shrink-0 img-fluid rounded" src="upma.jpg" alt="Food" style="width: 150px;">
+                            <div class="w-100 d-flex flex-column text-start ps-4">
+                                <h5>
+                                    <span>Upma</span>
+                                    <span class="text-primary">60</span>
+                                    <button class="add-to-cart" data-name="Upma" data-price="60" data-img="upma.jpg">Add to Cart</button>
+                                </h5>
+                                <small class="fst-italic">Semolina cooked with mild spices</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="d-flex align-items-center">
+                            <img class="flex-shrink-0 img-fluid rounded" src="Aloo-Paratha.jpg" alt="Food" style="width: 150px;">
+                            <div class="w-100 d-flex flex-column text-start ps-4">
+                                <h5>
+                                    <span>Aaloo-Paratha</span>
+                                    <span class="text-primary">80</span>
+                                    <button class="add-to-cart" data-name="Aaloo-Paratha" data-price="80" data-img="Aloo-Paratha.jpg">Add to Cart</button>
+                                </h5>
+                                <small class="fst-italic">Stuffed flatbread with spiced potatoes</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="d-flex align-items-center">
+                            <img class="flex-shrink-0 img-fluid rounded" src="chole.jpg" alt="Food" style="width: 150px;">
+                            <div class="w-100 d-flex flex-column text-start ps-4">
+                                <h5>
+                                    <span>Chhole Bhature</span>
+                                    <span class="text-primary">90</span>
+                                    <button class="add-to-cart" data-name="Chhole Bhature" data-price="90" data-img="chole.jpg">Add to Cart</button>
+                                </h5>
+                                <small class="fst-italic">Spicy chickpeas with fluffy fried bread</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="d-flex align-items-center">
+                            <img class="flex-shrink-0 img-fluid rounded" src="bread-omelette.jpg" alt="Food" style="width: 150px;">
+                            <div class="w-100 d-flex flex-column text-start ps-4">
+                                <h5>
+                                    <span>Bread-Omelette</span>
+                                    <span class="text-primary">70</span>
+                                    <button class="add-to-cart" data-name="Bread-Omelette" data-price="70" data-img="bread-omelette.jpg">Add to Cart</button>
+                                </h5>
+                                <small class="fst-italic">Toasted bread with fluffy egg omelette</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="d-flex align-items-center">
+                            <img class="flex-shrink-0 img-fluid rounded" src="sandwich.jpg" alt="Food" style="width: 150px;">
+                            <div class="w-100 d-flex flex-column text-start ps-4">
+                                <h5>
+                                    <span>Sandwich</span>
+                                    <span class="text-primary">40</span>
+                                    <button class="add-to-cart" data-name="Sandwich" data-price="40" data-img="sandwich.jpg">Add to Cart</button>
+                                </h5>
+                                <small class="fst-italic">Fresh veggie sandwich with mint chutney</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="d-flex align-items-center">
+                            <img class="flex-shrink-0 img-fluid rounded" src="panir.jpg" alt="Food" style="width: 150px;">
+                            <div class="w-100 d-flex flex-column text-start ps-4">
+                                <h5>
+                                    <span>Panir-Paratha</span>
+                                    <span class="text-primary">100</span>
+                                    <button class="add-to-cart" data-name="Panir-Paratha" data-price="100" data-img="panir.jpg">Add to Cart</button>
+                                </h5>
+                                <small class="fst-italic">Flatbread stuffed with spiced cottage cheese</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="d-flex align-items-center">
+                            <img class="flex-shrink-0 img-fluid rounded" src="sabundana.jpg" alt="Food" style="width: 150px;">
+                            <div class="w-100 d-flex flex-column text-start ps-4">
+                                <h5>
+                                    <span>Sabundana</span>
+                                    <span class="text-primary">75</span>
+                                    <button class="add-to-cart" data-name="Sabundana" data-price="75" data-img="sabundana.jpg">Add to Cart</button>
+                                </h5>
+                                <small class="fst-italic">Tapioca pearls cooked with peanuts & spices</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="d-flex align-items-center">
+                            <img class="flex-shrink-0 img-fluid rounded" src="dhokla.jpg" alt="Food" style="width: 150px;">
+                            <div class="w-100 d-flex flex-column text-start ps-4">
+                                <h5>
+                                    <span>Dokhla</span>
+                                    <span class="text-primary">120</span>
+                                    <button class="add-to-cart" data-name="Dokhla" data-price="120" data-img="dhokla.jpg">Add to Cart</button>
+                                </h5>
+                                <small class="fst-italic">Soft steamed snack made from fermented batter</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-content" id="tab-2">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="d-flex align-items-center">
+                            <img class="flex-shrink-0 img-fluid rounded" src="upma.jpg" alt="Food" style="width: 150px;">
+                            <div class="w-100 d-flex flex-column text-start ps-4">
+                                <h5>
+                                    <span>Beef Steak</span>
+                                    <span class="text-primary">145</span>
+                                    <button class="add-to-cart" data-name="Beef Steak" data-price="145" data-img="upma.jpg">Add to Cart</button>
+                                </h5>
+                                <small class="fst-italic">Semolina cooked with mild spices</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="d-flex align-items-center">
+                            <img class="flex-shrink-0 img-fluid rounded" src="Aloo-Paratha.jpg" alt="Food" style="width: 150px;">
+                            <div class="w-100 d-flex flex-column text-start ps-4">
+                                <h5>
+                                    <span>Pasta Carbonara</span>
+                                    <span class="text-primary">125</span>
+                                    <button class="add-to-cart" data-name="Pasta Carbonara" data-price="125" data-img="Aloo-Paratha.jpg">Add to Cart</button>
+                                </h5>
+                                <small class="fst-italic">Stuffed flatbread with spiced potatoes</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="d-flex align-items-center">
+                            <img class="flex-shrink-0 img-fluid rounded" src="chole.jpg" alt="Food" style="width: 150px;">
+                            <div class="w-100 d-flex flex-column text-start ps-4">
+                                <h5>
+                                    <span>Grilled Salmon</span>
+                                    <span class="text-primary">135</span>
+                                    <button class="add-to-cart" data-name="Grilled Salmon" data-price="135" data-img="chole.jpg">Add to Cart</button>
+                                </h5>
+                                <small class="fst-italic">Spicy chickpeas with fluffy fried bread</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="d-flex align-items-center">
+                            <img class="flex-shrink-0 img-fluid rounded" src="bread-omelette.jpg" alt="Food" style="width: 150px;">
+                            <div class="w-100 d-flex flex-column text-start ps-4">
+                                <h5>
+                                    <span>Chicken Wrap</span>
+                                    <span class="text-primary">105</span>
+                                    <button class="add-to-cart" data-name="Chicken Wrap" data-price="105" data-img="bread-omelette.jpg">Add to Cart</button>
+                                </h5>
+                                <small class="fst-italic">Toasted bread with fluffy egg omelette</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-content" id="tab-3">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="d-flex align-items-center">
+                            <img class="flex-shrink-0 img-fluid rounded" src="sandwich.jpg" alt="Food" style="width: 150px;">
+                            <div class="w-100 d-flex flex-column text-start ps-4">
+                                <h5>
+                                    <span>Filet Mignon</span>
+                                    <span class="text-primary">165</span>
+                                    <button class="add-to-cart" data-name="Filet Mignon" data-price="165" data-img="sandwich.jpg">Add to Cart</button>
+                                </h5>
+                                <small class="fst-italic">Fresh veggie sandwich with mint chutney</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="d-flex align-items-center">
+                            <img class="flex-shrink-0 img-fluid rounded" src="panir.jpg" alt="Food" style="width: 150px;">
+                            <div class="w-100 d-flex flex-column text-start ps-4">
+                                <h5>
+                                    <span>Lobster Thermidor</span>
+                                    <span class="text-primary">195</span>
+                                    <button class="add-to-cart" data-name="Lobster Thermidor" data-price="195" data-img="panir.jpg">Add to Cart</button>
+                                </h5>
+                                <small class="fst-italic">Flatbread stuffed with spiced cottage cheese</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="d-flex align-items-center">
+                            <img class="flex-shrink-0 img-fluid rounded" src="sabundana.jpg" alt="Food" style="width: 150px;">
+                            <div class="w-100 d-flex flex-column text-start ps-4">
+                                <h5>
+                                    <span>Rack of Lamb</span>
+                                    <span class="text-primary">175</span>
+                                    <button class="add-to-cart" data-name="Rack of Lamb" data-price="175" data-img="sabundana.jpg">Add to Cart</button>
+                                </h5>
+                                <small class="fst-italic">Tapioca pearls cooked with peanuts & spices</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="d-flex align-items-center">
+                            <img class="flex-shrink-0 img-fluid rounded" src="dhokla.jpg" alt="Food" style="width: 150px;">
+                            <div class="w-100 d-flex flex-column text-start ps-4">
+                                <h5>
+                                    <span>Vegetable Risotto</span>
+                                    <span class="text-primary">125</span>
+                                    <button class="add-to-cart" data-name="Vegetable Risotto" data-price="125" data-img="dhokla.jpg">Add to Cart</button>
+                                </h5>
+                                <small class="fst-italic">Soft steamed snack made from fermented batter</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Menu End -->
+
+    <script>
+        // Initialize cart if it doesn't exist
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        function toggleMenu() {
+            document.querySelector(".menu").classList.toggle("show");
+        }
+        
+        // Tab switching functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all tab links
+            const tabLinks = document.querySelectorAll('[data-tab]');
+            
+            // Add click event to each tab link
+            tabLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all tabs and links
+                    document.querySelectorAll('.tab-content').forEach(tab => {
+                        tab.classList.remove('active');
+                    });
+                    document.querySelectorAll('.nav-item a').forEach(tabLink => {
+                        tabLink.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked tab and link
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                    this.classList.add('active');
+                });
+            });
+            
+            // Add to cart functionality
+            const buttons = document.querySelectorAll('.add-to-cart');
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const itemName = this.getAttribute('data-name');
+                    const itemPrice = parseFloat(this.getAttribute('data-price'));
+                    const itemImg = this.getAttribute('data-img');
+                    
+                    // Check if item already exists in cart
+                    const existingItem = cart.find(item => item.name === itemName);
+                    
+                    if (existingItem) {
+                        existingItem.quantity += 1;
+                    } else {
+                        cart.push({
+                            name: itemName,
+                            price: itemPrice,
+                            img: itemImg,
+                            quantity: 1
+                        });
+                    }
+                    
+                    // Save to localStorage
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    
+                    // Show notification
+                    alert(`Added to cart: ${itemName} (${itemPrice})`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
